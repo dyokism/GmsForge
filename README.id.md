@@ -1,8 +1,8 @@
 [English](README.md) | [Bahasa Indonesia](README.id.md)
 
-# Universal GMS Doze
+# GMS Doze
 
-**Paksa Google Play services untuk mengikuti optimasi baterai (mode Doze) demi menghemat baterai.**
+**Paksa Google Play services untuk mengikuti optimasi baterai.**
 
 ![License](https://img.shields.io/badge/Lisensi-GPLv2-blue.svg)
 ![Android](https://img.shields.io/badge/Android-6.0%2B-green.svg)
@@ -11,7 +11,7 @@
 
 ## Ringkasan
 
-Universal GMS Doze adalah modul Magisk/KernelSU/APatch yang mengoptimalkan Google Play services (`com.google.android.gms`) untuk mencegah pengurasan baterai saat perangkat tidak digunakan (idle).
+GMS Doze adalah modul Magisk/KernelSU/APatch yang mengoptimalkan Google Play services (`com.google.android.gms`) untuk mencegah pengurasan baterai saat perangkat tidak digunakan (idle).
 
 ### Cara Kerja
 
