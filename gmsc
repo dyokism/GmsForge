@@ -1,0 +1,124 @@
+#!/system/bin/sh
+# diagnostic tool: check gms optimization status
+
+# root check
+if [ "$(id -u)" -ne 0 ]; then
+  echo -e "\e[1;33mSuperuser (su) rights is needed!\e[0m"
+  exit 1
+fi
+
+VERSION="1.0.0"
+NULL="/dev/null"
+GMS="com.google.android.gms"
+
+# colors
+R="\e[1;31m"
+G="\e[1;32m"
+Y="\e[1;33m"
+C="\e[1;36m"
+B="\e[1m"
+N="\e[0m"
+
+# help info
+show_help() {
+  echo ""
+  echo -e "${B}gmsc${N} — GMS Doze diagnostic tool v${VERSION}"
+  echo ""
+  echo "Usage: gmsc [option]"
+  echo ""
+  echo "Options:"
+  echo "  -h, --help    Show this help message"
+  echo "  -v, --version Show version"
+  echo "  (no option)   Run full diagnostic check"
+  echo ""
+  echo "Requires superuser (su) rights."
+  echo ""
+}
+
+# checker functions
+check_optimization() {
+  local whitelist
+  whitelist="$(dumpsys deviceidle whitelist 2> $NULL)"
+  if echo "$whitelist" | grep -q "$GMS"; then
+    echo -e "  Battery Optimization : ${R}Not Optimized${N} (GMS still in whitelist)"
+    return 1
+  else
+    echo -e "  Battery Optimization : ${G}Optimized${N}"
+    return 0
+  fi
+}
+
+check_device_admin() {
+  local component="$1"
+  local label="$2"
+  local status
+  status="$(pm dump "$GMS" 2> $NULL | grep "$component" | head -1)"
+
+  if echo "$status" | grep -qi "disabled"; then
+    echo -e "  $label : ${G}Disabled${N}"
+  elif [ -z "$status" ]; then
+    echo -e "  $label : ${Y}Not Found${N}"
+  else
+    echo -e "  $label : ${R}Enabled${N}"
+  fi
+}
+
+check_module() {
+  local mod_dir="/data/adb/modules/gms-doze"
+  if [ -d "$mod_dir" ]; then
+    local ver
+    ver="$(grep '^version=' "$mod_dir/module.prop" 2> $NULL | cut -d'=' -f2)"
+    echo -e "  Module Status         : ${G}Installed${N} (${ver:-unknown})"
+
+    # check if module is disabled
+    if [ -f "$mod_dir/disable" ]; then
+      echo -e "  Module State          : ${R}Disabled${N}"
+    else
+      echo -e "  Module State          : ${G}Active${N}"
+    fi
+  else
+    echo -e "  Module Status         : ${R}Not Installed${N}"
+  fi
+}
+
+run_diagnostics() {
+  echo ""
+  echo -e "${B}╔══════════════════════════════════════╗${N}"
+  echo -e "${B}║     GMS Doze Diagnostic Report       ║${N}"
+  echo -e "${B}╚══════════════════════════════════════╝${N}"
+  echo ""
+
+  echo -e "${C}[Module]${N}"
+  check_module
+  echo ""
+
+  echo -e "${C}[GMS Optimization]${N}"
+  check_optimization
+  echo ""
+
+  echo -e "${C}[Device Admin Components]${N}"
+  check_device_admin "DeviceAdminReceiver" "Admin Receiver    "
+  check_device_admin "MdmDeviceAdminReceiver" "MDM Receiver      "
+  echo ""
+
+  echo -e "${C}[Device Info]${N}"
+  echo "  Android API           : $(getprop ro.build.version.sdk)"
+  echo "  Android Version       : $(getprop ro.build.version.release)"
+  echo "  Device                : $(getprop ro.product.model)"
+  echo ""
+}
+
+case "$1" in
+  -h|--help)
+    show_help
+    exit 0
+    ;;
+  -v|--version)
+    echo "gmsc v${VERSION}"
+    exit 0
+    ;;
+  *)
+    run_diagnostics
+    exit 0
+    ;;
+esac

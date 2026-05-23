@@ -1,0 +1,7 @@
+id=gms-doze
+name=Universal GMS Doze
+version=v1.0.0
+versionCode=100
+author=dyokism
+description=Patches Google Play services and related components to enable battery optimization.
+updateJson=https://raw.githubusercontent.com/dyokism/gms-doze/main/module.json
