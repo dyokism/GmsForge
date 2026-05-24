@@ -1,7 +1,7 @@
-id=gms-doze
-name=GMS Doze
-version=v1.0.0
-versionCode=100
+id=gmsforge
+name=GmsForge
+version=1.1
+versionCode=110
 author=dyokism
 description=Patches Google Play services and related components to enable battery optimization.
-updateJson=https://raw.githubusercontent.com/dyokism/gms-doze/main/module.json
+updateJson=https://raw.githubusercontent.com/dyokism/GmsForge/main/module.json

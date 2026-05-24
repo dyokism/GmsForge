@@ -7,7 +7,7 @@ INSTALL_LOG="$MODPATH/install.log"
 log() {
   echo "$(date '+%H:%M:%S') $1" >> "$INSTALL_LOG"
 }
-log "=== gms doze installation ==="
+log "=== GmsForge installation ==="
 
 # check root type
 ui_print "- Checking root implementation"

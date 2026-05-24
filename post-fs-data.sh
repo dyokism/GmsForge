@@ -23,19 +23,19 @@ if [ -f "$MODDIR/module.prop" ]; then
   OWN_ID="$(grep '^id=' "$MODDIR/module.prop" | cut -d'=' -f2)"
 fi
 
-PATCHED=0
-find /data/adb/modules -type f -iname "*.xml" -print 2> $NULL |
-while IFS= read -r XML; do
-  # skip our own module files
-  case "$XML" in
-    *"/$OWN_ID/"*) continue ;;
-  esac
+find /data/adb/modules -type f -iname "*.xml" -print 2> $NULL | {
+  PATCHED=0
+  while IFS= read -r XML; do
+    # skip our own module files
+    case "$XML" in
+      *"/$OWN_ID/"*) continue ;;
+    esac
 
-  if grep -qE "$STR1|$STR2|$STR3|$STR4" "$XML" 2> $NULL; then
-    sed -i "/$STR1/d;/$STR2/d;/$STR3/d;/$STR4/d" "$XML"
-    log "Patched conflict: $XML"
-    PATCHED=$((PATCHED + 1))
-  fi
-done
-
-log "Conflict scan complete (patched: $PATCHED)"
+    if grep -qE "$STR1|$STR2|$STR3|$STR4" "$XML" 2> $NULL; then
+      sed -i "/$STR1/d;/$STR2/d;/$STR3/d;/$STR4/d" "$XML"
+      log "Patched conflict: $XML"
+      PATCHED=$((PATCHED + 1))
+    fi
+  done
+  log "Conflict scan complete (patched: $PATCHED)"
+}

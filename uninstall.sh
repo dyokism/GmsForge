@@ -33,6 +33,6 @@ if [ -d "$BACKUP_DIR/module_xml" ]; then
 fi
 
 # remove module data
-rm -rf /data/adb/gms-doze
+rm -rf /data/adb/gmsforge
 
 exit 0
