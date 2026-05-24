@@ -7,7 +7,7 @@ if [ "$(id -u)" -ne 0 ]; then
   exit 1
 fi
 
-VERSION="1.0.0"
+VERSION="1.1"
 NULL="/dev/null"
 GMS="com.google.android.gms"
 
@@ -22,7 +22,7 @@ N="\e[0m"
 # help info
 show_help() {
   echo ""
-  echo -e "${B}gmsc${N} — GMS Doze diagnostic tool v${VERSION}"
+  echo -e "${B}gmsc${N} — GmsForge diagnostic tool v${VERSION}"
   echo ""
   echo "Usage: gmsc [option]"
   echo ""
@@ -64,7 +64,7 @@ check_device_admin() {
 }
 
 check_module() {
-  local mod_dir="/data/adb/modules/gms-doze"
+  local mod_dir="/data/adb/modules/gmsforge"
   if [ -d "$mod_dir" ]; then
     local ver
     ver="$(grep '^version=' "$mod_dir/module.prop" 2> $NULL | cut -d'=' -f2)"
@@ -84,7 +84,7 @@ check_module() {
 run_diagnostics() {
   echo ""
   echo -e "${B}╔══════════════════════════════════════╗${N}"
-  echo -e "${B}║     GMS Doze Diagnostic Report       ║${N}"
+  echo -e "${B}║     GmsForge Diagnostic Report       ║${N}"
   echo -e "${B}╚══════════════════════════════════════╝${N}"
   echo ""
 

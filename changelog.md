@@ -3,6 +3,7 @@
   - Renamed module from GMS Doze to GmsForge
   - Fixed subshell pipe bug in post-fs-data.sh for accurate conflict patching counts
   - Updated uninstall.sh and customize.sh to reflect new module name GmsForge
+  - Updated gmsc diagnostic tool path, branding, and version to 1.1
 
 - 1.0.0 (First Release)
   - GMS Doze optimizations
