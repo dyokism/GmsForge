@@ -1,17 +1,17 @@
 [English](README.md) | [Bahasa Indonesia](README.id.md)
 
-# GMS Doze
+# GmsForge
 
 **Paksa Google Play services untuk mengikuti optimasi baterai.**
 
 ![License](https://img.shields.io/badge/Lisensi-GPLv2-blue.svg)
 ![Android](https://img.shields.io/badge/Android-6.0%2B-green.svg)
-![Version](https://img.shields.io/badge/Versi-1.0.0-orange.svg)
+![Version](https://img.shields.io/badge/Versi-1.1-orange.svg)
 ![Root](https://img.shields.io/badge/Root-Magisk%20%7C%20KernelSU%20%7C%20APatch-red.svg)
 
 ## Ringkasan
 
-GMS Doze adalah modul Magisk/KernelSU/APatch yang mengoptimalkan Google Play services (`com.google.android.gms`) untuk mencegah pengurasan baterai saat perangkat tidak digunakan (idle).
+GmsForge adalah modul Magisk/KernelSU/APatch yang mengoptimalkan Google Play services (`com.google.android.gms`) untuk mencegah pengurasan baterai saat perangkat tidak digunakan (idle).
 
 ### Cara Kerja
 
