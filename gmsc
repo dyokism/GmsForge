@@ -1,4 +1,5 @@
 #!/system/bin/sh
+# shellcheck disable=SC3037,SC3043
 # diagnostic tool: check gms optimization status
 
 # root check

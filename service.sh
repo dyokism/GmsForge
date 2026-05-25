@@ -1,4 +1,5 @@
 #!/system/bin/sh
+# shellcheck disable=SC2045
 # boot service: optimize gms at runtime
 
 MODDIR=${0%/*}

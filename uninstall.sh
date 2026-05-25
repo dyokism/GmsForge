@@ -1,4 +1,5 @@
 #!/system/bin/sh
+# shellcheck disable=SC2045
 # uninstall: restore original state
 
 MODDIR=${0%/*}

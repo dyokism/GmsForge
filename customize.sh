@@ -1,4 +1,5 @@
 #!/system/bin/sh
+# shellcheck disable=SC3043,SC2181
 # installation entrypoint
 
 set -x

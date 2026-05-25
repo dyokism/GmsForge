@@ -4,7 +4,7 @@
 
 **Force Google Play services to respect battery optimization.**
 
-![License](https://img.shields.io/badge/License-GPLv2-blue.svg)
+![License](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Android](https://img.shields.io/badge/Android-6.0%2B-green.svg)
 ![Version](https://img.shields.io/badge/Version-1.1-orange.svg)
 ![Root](https://img.shields.io/badge/Root-Magisk%20%7C%20KernelSU%20%7C%20APatch-red.svg)
@@ -73,4 +73,4 @@ pm enable com.google.android.gms/com.google.android.gms.mdm.receivers.MdmDeviceA
 ## Developer & License
 
 - **Developer**: [dyokism](https://github.com/dyokism)
-- **License**: GPL v2.0
+- **License**: MIT
