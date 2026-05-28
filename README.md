@@ -6,7 +6,7 @@
 
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Android](https://img.shields.io/badge/Android-6.0%2B-green.svg)
-![Version](https://img.shields.io/badge/Version-1.1-orange.svg)
+![Version](https://img.shields.io/badge/Version-1.2-orange.svg)
 ![Root](https://img.shields.io/badge/Root-Magisk%20%7C%20KernelSU%20%7C%20APatch-red.svg)
 
 ## Overview

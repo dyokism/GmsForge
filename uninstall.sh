@@ -26,7 +26,7 @@ if [ -d "$BACKUP_DIR/module_xml" ]; then
   for BACKUP in "$BACKUP_DIR/module_xml"/*; do
     [ -f "$BACKUP" ] || continue
     # reconstruct original path from backup name
-    ORIG_PATH="$(basename "$BACKUP" | sed 's/^_/\//;s/_/\//g')"
+    ORIG_PATH="$(basename "$BACKUP" | tr '@' '/')"
     if [ -f "$ORIG_PATH" ]; then
       cp -af "$BACKUP" "$ORIG_PATH" 2> $NLL
     fi

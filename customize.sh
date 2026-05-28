@@ -72,13 +72,13 @@ PATCH_SX() {
     # backup original xml before patching
     mkdir -p "$backup_dir"
     local backup_name
-    backup_name="$(echo "$SX" | tr '/' '_')"
+    backup_name="$(echo "$SX" | tr '/' '@')"
     cp -af "$ROOT$SX" "$backup_dir/$backup_name" 2> $NULL
     log "Backup: $SX -> .backup/system_xml/$backup_name"
 
     cp -af "$ROOT$SX" "$MODPATH$SX"
     ui_print "  Patching: $SX"
-    sed -i "/$STR1/d;/$STR2/d" "$MODPATH/$SX"
+    sed -i "/$STR1/d;/$STR2/d" "$MODPATH$SX"
 
     if [ $? -eq 0 ]; then
       log "Patched: $SX"
@@ -116,6 +116,13 @@ PATCH_MX() {
   local patched=0
   local backup_dir="$MODPATH/.backup/module_xml"
 
+  # check if conflict patching is disabled
+  if [ -f "/data/adb/gmsforge/disable_conflict_patch" ]; then
+    ui_print "  Conflicting modules patch is disabled"
+    log "Module XML patching skipped (disabled by user)"
+    return 0
+  fi
+
   ui_print "- Searching conflicting XML"
   for MX in $MOD_XML; do
     MOD="$(echo "$MX" | awk -F'/' '{print $5}')"
@@ -123,7 +130,7 @@ PATCH_MX() {
     # backup module xml before patching
     mkdir -p "$backup_dir"
     local backup_name
-    backup_name="$(echo "$MX" | tr '/' '_')"
+    backup_name="$(echo "$MX" | tr '/' '@')"
     cp -af "$MX" "$backup_dir/$backup_name" 2> $NULL
     log "Backup (module): $MX"
 
@@ -192,6 +199,7 @@ CLEAR_GMS() {
 # finalize installer
 FINALIZE() {
   ui_print "- Finalizing installation"
+  mkdir -p "/data/adb/gmsforge"
 
   # clean up unused files
   ui_print "  Cleaning obsolete files"

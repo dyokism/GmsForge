@@ -1,7 +1,7 @@
 id=gmsforge
 name=GmsForge
-version=1.1
-versionCode=110
+version=1.2
+versionCode=120
 author=dyokism
 description=Patches Google Play services and related components to enable battery optimization.
 updateJson=https://raw.githubusercontent.com/dyokism/GmsForge/main/update.json
