@@ -1,4 +1,15 @@
 ## Change Log:
+- 1.3 (Security & Core Robustness)
+  - Synced and resolved critical location exemption whitelist strings (`allow-unthrottled-location` and `allow-ignore-location-settings`) across installer and boot routines.
+  - Hardened directory search paths by eliminating fragile wildcard globs in the `find` utility.
+  - Secured reinstall/update procedures by excluding GmsForge's own backups and modules directory from XML scans.
+  - Disabled active command execution tracing (`set -x`) in production builds to clean up installer outputs.
+  - Replaced problematic `ls /data/user` loops with robust shell globbing to handle multi-user loops securely.
+  - Refined diagnostic receiver regex check in CLI tool (`gmsc`) to avoid dumpsys false positives.
+  - Added strict verify checks and error handling for diagnostic CLI and overlay partition movements.
+  - Integrated a fully instrumented uninstallation logging system stored in `/tmp/gmsforge_uninstall.log`.
+  - Bumped version to 1.3 across all module configurations.
+
 - 1.2 (Release Update)
   - Fixed conflict module XML restoration path bug for paths containing underscores (e.g. system_ext)
   - Improved safety by implementing boot-time conflict backups in post-fs-data.sh

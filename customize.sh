@@ -2,8 +2,6 @@
 # shellcheck disable=SC3043,SC2181
 # installation entrypoint
 
-set -x
-
 INSTALL_LOG="$MODPATH/install.log"
 log() {
   echo "$(date '+%H:%M:%S') $1" >> "$INSTALL_LOG"
@@ -48,15 +46,18 @@ log "Starting XML patching"
 GMS0="\"com.google.android.gms\""
 STR1="allow-in-power-save package=$GMS0"
 STR2="allow-in-data-usage-save package=$GMS0"
+STR3="allow-unthrottled-location package=$GMS0"
+STR4="allow-ignore-location-settings package=$GMS0"
 NULL="/dev/null"
+
+ROOT="" # intentionally empty; paths are absolute
 
 # search system xml files with gms whitelist
 ui_print "- Searching default XML files"
 SYS_XML="$(
-  SXML="$(find /system_ext/* /system/* /product/* \
-    /vendor/* /india/* /my_bigball/* -type f -iname '*.xml' -print 2> $NULL)"
+  SXML="$(find /system_ext /system /product /vendor /india /my_bigball -type f -iname '*.xml' -print 2> $NULL)"
   for S in $SXML; do
-    if grep -qE "$STR1|$STR2" "$ROOT$S" 2> $NULL; then
+    if grep -qE "$STR1|$STR2|$STR3|$STR4" "$ROOT$S" 2> $NULL; then
       echo "$S"
     fi
   done
@@ -78,7 +79,7 @@ PATCH_SX() {
 
     cp -af "$ROOT$SX" "$MODPATH$SX"
     ui_print "  Patching: $SX"
-    sed -i "/$STR1/d;/$STR2/d" "$MODPATH$SX"
+    sed -i "/$STR1/d;/$STR2/d;/$STR3/d;/$STR4/d" "$MODPATH$SX"
 
     if [ $? -eq 0 ]; then
       log "Patched: $SX"
@@ -95,6 +96,9 @@ PATCH_SX() {
       ui_print "- Moving files to module directory"
       mkdir -p "$MODPATH/system/$P"
       mv -f "$MODPATH/$P" "$MODPATH/system/"
+      if [ $? -ne 0 ] || [ ! -d "$MODPATH/system/$P" ]; then
+        abort "  Failed to organize system overlay files for $P!"
+      fi
     fi
   done
 
@@ -102,15 +106,11 @@ PATCH_SX() {
   log "System XML patched: $patched file(s)"
 }
 
-# search and patch conflicting modules
-MOD_XML="$(
-  MXML="$(find /data/adb/* -type f -iname '*.xml' -print 2> $NULL)"
-  for M in $MXML; do
-    if grep -qE "$STR1|$STR2" "$M" 2> $NULL; then
-      echo "$M"
-    fi
-  done
-)"
+# get own module id to exclude from scan
+OWN_ID=""
+if [ -f "$MODPATH/module.prop" ]; then
+  OWN_ID="$(grep '^id=' "$MODPATH/module.prop" | cut -d'=' -f2)"
+fi
 
 PATCH_MX() {
   local patched=0
@@ -124,6 +124,22 @@ PATCH_MX() {
   fi
 
   ui_print "- Searching conflicting XML"
+
+  # search and patch conflicting modules
+  local MOD_XML
+  MOD_XML="$(
+    local MXML
+    MXML="$(find /data/adb/modules -type f -iname '*.xml' -print 2> $NULL)"
+    for M in $MXML; do
+      case "$M" in
+        *"/$OWN_ID/"*) continue ;;
+      esac
+      if grep -qE "$STR1|$STR2|$STR3|$STR4" "$M" 2> $NULL; then
+        echo "$M"
+      fi
+    done
+  )"
+
   for MX in $MOD_XML; do
     MOD="$(echo "$MX" | awk -F'/' '{print $5}')"
 
@@ -135,7 +151,7 @@ PATCH_MX() {
     log "Backup (module): $MX"
 
     ui_print "  $MOD: $MX"
-    sed -i "/$STR1/d;/$STR2/d" "$MX"
+    sed -i "/$STR1/d;/$STR2/d;/$STR3/d;/$STR4/d" "$MX"
 
     if [ $? -eq 0 ]; then
       log "Patched (module): $MX"
@@ -160,6 +176,9 @@ ADDON() {
   ui_print "- Installing diagnostic tool (gmsc)"
   mkdir -p "$MODPATH/system/bin"
   mv -f "$MODPATH/gmsc" "$MODPATH/system/bin/gmsc"
+  if [ ! -f "$MODPATH/system/bin/gmsc" ]; then
+    abort "  Failed to install gmsc tool!"
+  fi
   log "Installed: gmsc -> system/bin/gmsc"
 }
 

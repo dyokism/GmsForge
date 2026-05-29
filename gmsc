@@ -8,7 +8,7 @@ if [ "$(id -u)" -ne 0 ]; then
   exit 1
 fi
 
-VERSION="1.2"
+VERSION="1.3"
 NULL="/dev/null"
 GMS="com.google.android.gms"
 
@@ -53,7 +53,7 @@ check_device_admin() {
   local component="$1"
   local label="$2"
   local status
-  status="$(pm dump "$GMS" 2> $NULL | grep "$component" | head -1)"
+  status="$(pm dump "$GMS" 2> $NULL | grep -E "(enabled|disabled).*$component" | head -1)"
 
   if echo "$status" | grep -qi "disabled"; then
     echo -e "  $label : ${G}Disabled${N}"

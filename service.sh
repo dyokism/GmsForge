@@ -33,7 +33,9 @@ log() {
 
   # disable device administrators
   log "Disabling GMS device admin components"
-  for U in $(ls /data/user); do
+  for user_dir in /data/user/*; do
+    [ -d "$user_dir" ] || continue
+    U="${user_dir##*/}"
     for C in $GC1 $GC2; do
       if pm disable --user "$U" "$GMS/$GMS.$C" > $NLL 2>&1; then
         log "Disabled: $GMS.$C (user $U)"
